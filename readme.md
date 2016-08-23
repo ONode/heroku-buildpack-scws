@@ -27,7 +27,7 @@ SCWS 由 [hightman][8] 开发，并以 BSD 许可协议开源发布 ，参见 [C
 配套工具用法
 ------------
 
-1. **$prefix/bin/scws** 这是分词的命令行工具，执行 scws -h 可以看到详细帮助说明。
+1. **scws** 这是分词的命令行工具，执行 scws -h 可以看到详细帮助说明。
    ```
    Usage: scws [options] [[-i] input] [[-o] output]
    ```
@@ -54,7 +54,7 @@ SCWS 由 [hightman][8] 开发，并以 BSD 许可协议开源发布 ，参见 [C
    * _-a [~]attr1[,attr2[,...]]_ 只显示某些词性的词，加~表示过滤该词性的词，多个词性之间用逗号分隔
    * _-v_ 查看版本
 
-2. **$prefix/bin/scws-gen-dict** 词典转换工具
+2. **scws-gen-dict** 词典转换工具
    ```
    Usage: scws-gen-dict [options] [-i] dict.txt [-o] dict.xdb
    ```
