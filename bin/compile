@@ -4,6 +4,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 INSTALL_DIR=$BUILD_DIR/vendor/scws/
+ETC=$INSTALL_DIR/etc
 INIT_SCRIPT="$BUILD_DIR/.profile.d/scws.sh"
 #  DOWNLOAD_URL="http://www.xunsearch.com/scws/down/scws-1.2.2.tar.bz2"
 echo "============================================"
@@ -14,7 +15,14 @@ echo "============================================"
 mkdir -p $INSTALL_DIR
 ##curl $DOWNLOAD_URL \
 ##  -o - | tar -zxvf -C $INSTALL_DIR -f -
+
 tar -zxvf scws.1.2.2.tar.gz -C $INSTALL_DIR
+
+echo "Adding dictionaries for Traditional Chinese and Simplifed Chinese modules"
+echo "============================================"
+tar -zxvf dict.tar.gz -C $ETC
+
 echo "Building runtime environment for SCWS installation"
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"$INSTALL_DIR/bin:\$PATH\"" > $INIT_SCRIPT
+echo "export SCWSDICT=\"$INSTALL_DIR/etc:\$PATH\"" > $INIT_SCRIPT
