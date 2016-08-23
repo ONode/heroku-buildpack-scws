@@ -7,7 +7,7 @@ INSTALL_DIR=$BUILD_DIR/vendor/scws/
 INIT_SCRIPT="$BUILD_DIR/.profile.d/scws.sh"
 #  DOWNLOAD_URL="http://www.xunsearch.com/scws/down/scws-1.2.2.tar.bz2"
 echo "============================================"
-echo "Build XPDF module"
+echo "Build SCWC module"
 echo "============================================"
 echo "Untarring xpdf.tar.gz into ${INSTALL_DIR}"
 echo "============================================"
