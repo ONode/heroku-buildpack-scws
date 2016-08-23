@@ -9,23 +9,11 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 INIT_SCRIPT="$BUILD_DIR/.profile.d/scws.sh"
-
-if [ -f "$ENV_DIR/BONSAI_URL" ]; then
-  ELASTICSEARCH_URL=$(cat $ENV_DIR/BONSAI_URL)
-elif [ -f "$ENV_DIR/ELASTICSEARCH_URL" ]; then
-  ELASTICSEARCH_URL=$(cat $ENV_DIR/ELASTICSEARCH_URL)
-else
-   ELASTICSEARCH_URL="http://localhost:9200"
-fi
-
-
   
 #  ELASTICSEARCH_URL="http://localhost:9200"
-if [ -f "$ENV_DIR/DOWNLOAD_URL" ]; then
-  DOWNLOAD_URL=$(cat $ENV_DIR/DOWNLOAD_URL)
-else
-  DOWNLOAD_URL="https://download.elastic.co/kibana/kibana/kibana-4.5.4-linux-x64.tar.gz"
-fi
+DOWNLOAD_URL="http://www.xunsearch.com/scws/down/scws-1.2.2.tar.bz2"
+
+
 
 KIBANA_PACKAGE=${DOWNLOAD_URL##*/}
 
@@ -44,7 +32,7 @@ mkdir="mkdir -p"
 download="curl -sLO"
 extract="$tar -C $BUILD_DIR --wildcards -f"
 verify="sha1sum --check --warn"
-#configure='sed -i s/^\(elasticsearch.url:\x20\).\{1,\}/\1"'$(echo $ELASTICSEARCH_URL | sed 's/\//\\\//g')'"/'
+
 
 echo "-----> Installing Kibana..."
 
@@ -54,7 +42,7 @@ CONFIG_DIR=$KIBANA_DIR/config/
 echo "-----> create folder if not exist $CONFIG_DIR"
 $mkdir $CONFIG_DIR
 
-if [ ! -f "$CACHE_DIR/$KIBANA_PACKAGE" ]; then
+if [ ! -f "$CACHE_DIR/scws_dir" ]; then
   echo "downloading $DOWNLOAD_URL" | indent
   $download $DOWNLOAD_URL
 
