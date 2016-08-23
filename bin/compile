@@ -1,70 +1,24 @@
 #!/bin/sh
 
-indent() {
-  sed -u 's/^/       /'
-}
-
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
-
+INSTALL_DIR=$BUILD_DIR/vendor/scws/
 INIT_SCRIPT="$BUILD_DIR/.profile.d/scws.sh"
-  
 #  ELASTICSEARCH_URL="http://localhost:9200"
 DOWNLOAD_URL="http://www.xunsearch.com/scws/down/scws-1.2.2.tar.bz2"
+echo "============================================"
+echo "Build XPDF module"
+echo "============================================"
+echo "Untarring xpdf.tar.gz into ${INSTALL_DIR}"
+echo "============================================"
+mkdir -p $INSTALL_DIR
 
+curl $DOWNLOAD_URL \
+  -o - | tar -zxvf -C $INSTALL_DIR -f -
+  
+#tar -zxvf xpdf.tar.gz -C $INSTALL_DIR
+echo "Building runtime environment for SCWS installation"
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"$TESSERACT_OCR_DIR/bin:\$PATH\"" > $INIT_SCRIPT
 
-
-KIBANA_PACKAGE=${DOWNLOAD_URL##*/}
-
-case ${KIBANA_PACKAGE} in
-  *.tar.gz)
-    KIBANA_DIR="$BUILD_DIR/${KIBANA_PACKAGE%%.tar.gz}"
-    tar="tar xz"
-    ;;
-  *)
-    echo "Only tar.gz is supported: $KIBANA_PACKAGE" | indent
-    exit 1
-    ;;
-esac
-
-mkdir="mkdir -p"
-download="curl -sLO"
-extract="$tar -C $BUILD_DIR --wildcards -f"
-verify="sha1sum --check --warn"
-
-
-echo "-----> Installing Kibana..."
-
-$mkdir ${INIT_SCRIPT%/*}
-$mkdir $CACHE_DIR
-CONFIG_DIR=$KIBANA_DIR/config/
-echo "-----> create folder if not exist $CONFIG_DIR"
-$mkdir $CONFIG_DIR
-
-if [ ! -f "$CACHE_DIR/scws_dir" ]; then
-  echo "downloading $DOWNLOAD_URL" | indent
-  $download $DOWNLOAD_URL
-
-  echo "verifying against ${DOWNLOAD_URL}.sha1.txt" | indent
-  $download "${DOWNLOAD_URL}.sha1.txt"
-  $verify "${KIBANA_PACKAGE}.sha1.txt"
-
-  if [ $? -eq 0 ]; then
-    mv $KIBANA_PACKAGE $CACHE_DIR
-  else
-    exit 1
-  fi
-fi
-
-$extract $CACHE_DIR/$KIBANA_PACKAGE
-KIBANA_YML="$KIBANA_DIR/config/kibana.yml"
-echo "-----> Configuring ELASTICSEARCH_URL"
-#$configure $KIBANA_DIR/config/kibana.yml
-
-echo "-----> set get the yml $KIBANA_YML" 
-echo "-----> set elasticsearch as $ELASTICSEARCH_URL" 
-echo "elasticsearch.url: \"$ELASTICSEARCH_URL\"" >| $KIBANA_YML
-
-echo "Exporting PATH" | indent
-echo 'export PATH="$PATH:'${KIBANA_DIR##*/}'/bin"' > $INIT_SCRIPT
